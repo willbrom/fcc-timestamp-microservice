@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.static(__dirname + "/public"))
 app.use((req, res, next) => {
 	let log = `${req.method} ${req.path} ${req.ip}\n` 
-	fs.writeFile("logs", log, (err) => {
+	fs.appendFile("logs", log, (err) => {
 		if (err) console.log(err)
 	})
 	next()
