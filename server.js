@@ -21,17 +21,23 @@ app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/views/index.html")
 })
 
-app.get("/api/:date", (req, res) => {
+app.get("/api/:date?", (req, res) => {
 	let dateParam = req.params.date
 	let dateInt = +dateParam
 
 	let dateUTC = new Date(dateInt || dateParam).toUTCString() 
 	let dateMilli = dateInt || Date.parse(dateParam)
 
-	res.json({
-		unix: dateMilli,
-		utc: dateUTC
-	})
+	if (dateParam && dateUTC == "Invalid Date") {
+		res.json({
+			error: "Invalid Date"
+		})
+	} else {
+		res.json({
+			unix: dateParam ? dateMilli : Date.parse(new Date()),
+			utc: dateParam ? dateUTC : new Date().toUTCString()
+		})
+	}
 })
 
 app.listen(port, () => {
